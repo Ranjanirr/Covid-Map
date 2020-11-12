@@ -148,7 +148,7 @@ def tabulateStateResults(states, showMethods=False):
         for m in methodsToAvgOver: results[m+"(%)"] = []
 
     results["CumCasesPerMil"] = []; results["CumDeathsPerMil"] = []
-    results["InfProb(%)"] = []; results["ContBudg"] = [];
+    results["InfChance"] = []; results["ContactBudget"] = [];
 
     #results["ActiveInf"] = []; results["infOnDate"] = []
 
@@ -167,14 +167,14 @@ def tabulateStateResults(states, showMethods=False):
 
         oddsAvg = 100 * model.getInfecProbability(s, userParams["TP"], userParams["contacts"], methodsToAvgOver, tqspace=userParams["timeToQuar"])
         # results["InfProb(%)"].append(oddsAvg)
-        results["InfProb(%)"].append(int(oddsAvg*100)/100.0)
+        results["InfChance"].append(str(int(oddsAvg*100)/100.0)+"%")
 
         outcome, maxM = model.getContactsBudget(s, userParams["TP"], userParams["comfortProb"], methodsToAvgOver,
                                                 tqspace=userParams["timeToQuar"])
         if outcome != "NO LIMIT":
-            results["ContBudg"].append(int(maxM))
+            results["ContactBudget"].append(int(maxM))
         else:
-            results["ContBudg"].append(outcome)
+            results["ContactBudget"].append(outcome)
 
         # activeInfections = model.getPhi_i(s, userParams["TP"], userParams["contacts"], ["A"], tqspace=userParams["timeToQuar"])
         # results["ActiveInf"].append(ceil(activeInfections))
