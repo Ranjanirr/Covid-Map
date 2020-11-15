@@ -34,8 +34,8 @@ var contact = createStateData("Contact Budget", [245, 141, 136]);
 //Gets results from the json and stores them in variables
 var obj = JSON.parse(JSON.stringify(results));
 //var obj = JSON.parse(results);
-infection.theResults = obj.InfProb;
-contact.theResults = obj.ContBudg;
+infection.theResults = obj.InfChance;
+contact.theResults = obj.ContactBudget;
 
 
 
