@@ -168,7 +168,7 @@ def tabulateStateResults(states, showMethods=False):
 
         infectionsOverPast14Days = dataIO.getEntryFromCTPData(ctpRows, s, userParams["consideredDate"], "positiveIncrease", 14)
         incidenceRate = (100000.0*infectionsOverPast14Days)/statePopulation[s]
-        results["IncidenceRate"].append(incidenceRate)
+        results["IncidenceRate"].append(str(int(incidenceRate*100)/100.0)+"%")
 
         oddsAvg = 100 * model.getInfecProbability(s, userParams["TP"], userParams["contacts"], methodsToAvgOver, tqspace=userParams["timeToQuar"])
         # results["InfProb(%)"].append(oddsAvg)
