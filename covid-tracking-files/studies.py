@@ -147,8 +147,8 @@ def tabulateStateResults(states, showMethods=False):
     if showMethods:
         for m in methodsToAvgOver: results[m+"(%)"] = []
 
-    results["CumCasesPerMil"] = []; results["CumDeathsPerMil"] = []; results["IncidenceRate"] = []
-    results["InfChance"] = []; results["ContactBudget"] = [];
+    results["Cases"] = []; results["Deaths"] = []; results["Incidence Rate"] = []
+    results["Inf. Chance"] = []; results["Contact Budget"] = [];
 
 
     #results["ActiveInf"] = []; results["infOnDate"] = []
@@ -160,26 +160,26 @@ def tabulateStateResults(states, showMethods=False):
 
         cumCases = dataIO.getEntryFromCTPData(ctpRows, s, userParams["consideredDate"], "positive")
         cumCasesPerMil = float(cumCases)*1000000.0 / statePopulation[s]
-        results["CumCasesPerMil"].append(int(cumCasesPerMil))
+        results["Cases"].append(int(cumCasesPerMil))
 
         cumDeaths = dataIO.getEntryFromCTPData(ctpRows, s, userParams["consideredDate"], "death")
         cumDeathsPerMil = float(cumDeaths)*1000000.0 / statePopulation[s]
-        results["CumDeathsPerMil"].append(int(cumDeathsPerMil))
+        results["Deaths"].append(int(cumDeathsPerMil))
 
         infectionsOverPast14Days = dataIO.getEntryFromCTPData(ctpRows, s, userParams["consideredDate"], "positiveIncrease", 14)
-        incidenceRate = (100000.0*infectionsOverPast14Days)/statePopulation[s]
-        results["IncidenceRate"].append(str(int(incidenceRate*100)/100.0)+"%")
+        incidenceRate = (1000000.0*infectionsOverPast14Days)/statePopulation[s]
+        results["Incidence Rate"].append(int(incidenceRate*100)/100.0)
 
         oddsAvg = 100 * model.getInfecProbability(s, userParams["TP"], userParams["contacts"], methodsToAvgOver, tqspace=userParams["timeToQuar"])
         # results["InfProb(%)"].append(oddsAvg)
-        results["InfChance"].append(str(int(oddsAvg*100)/100.0)+"%")
+        results["Inf. Chance"].append(str(int(oddsAvg*100)/100.0)+"%")
 
         outcome, maxM = model.getContactsBudget(s, userParams["TP"], userParams["comfortProb"], methodsToAvgOver,
                                                 tqspace=userParams["timeToQuar"])
         if outcome != "NO LIMIT":
-            results["ContactBudget"].append(int(maxM))
+            results["Contact Budget"].append(int(maxM))
         else:
-            results["ContactBudget"].append(outcome)
+            results["Contact Budget"].append(outcome)
 
         # activeInfections = model.getPhi_i(s, userParams["TP"], userParams["contacts"], ["A"], tqspace=userParams["timeToQuar"])
         # results["ActiveInf"].append(ceil(activeInfections))
