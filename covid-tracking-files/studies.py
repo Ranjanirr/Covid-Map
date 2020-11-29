@@ -147,8 +147,9 @@ def tabulateStateResults(states, showMethods=False):
     if showMethods:
         for m in methodsToAvgOver: results[m+"(%)"] = []
 
-    results["CumCasesPerMil"] = []; results["CumDeathsPerMil"] = []
+    results["CumCasesPerMil"] = []; results["CumDeathsPerMil"] = []; results["IncidenceRate"] = []
     results["InfChance"] = []; results["ContactBudget"] = [];
+
 
     #results["ActiveInf"] = []; results["infOnDate"] = []
 
@@ -164,6 +165,10 @@ def tabulateStateResults(states, showMethods=False):
         cumDeaths = dataIO.getEntryFromCTPData(ctpRows, s, userParams["consideredDate"], "death")
         cumDeathsPerMil = float(cumDeaths)*1000000.0 / statePopulation[s]
         results["CumDeathsPerMil"].append(int(cumDeathsPerMil))
+
+        infectionsOverPast14Days = dataIO.getEntryFromCTPData(ctpRows, s, userParams["consideredDate"], "positiveIncrease", 14)
+        incidenceRate = (100000.0*infectionsOverPast14Days)/statePopulation[s]
+        results["IncidenceRate"].append(incidenceRate)
 
         oddsAvg = 100 * model.getInfecProbability(s, userParams["TP"], userParams["contacts"], methodsToAvgOver, tqspace=userParams["timeToQuar"])
         # results["InfProb(%)"].append(oddsAvg)

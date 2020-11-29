@@ -79,8 +79,9 @@ def getEffRepFromData(rawRows, region, date):
 #         if summ == 0: print(colKey, "for", state, "on", date, "averaged over", userParams["avgOverDays"], "days is zero")
 #         return summ/count
 
-def getEntryFromCTPData(ctpRows, state, date, colKey):
+def getEntryFromCTPData(ctpRows, state, date, colKey, avgOverDays=NULLL):
 
+    if avgOverDays == NULLL: avgOverDays = userParams["avgOverDays"]
     if date < convert_Y_M_D(userParams["earliestDate"]) or date > convert_Y_M_D(userParams["dateOfLastUpd"]):
         print("ERROR: No data for date ", date, "exiting...")
         exit()
@@ -90,7 +91,7 @@ def getEntryFromCTPData(ctpRows, state, date, colKey):
         #lastDateInWindow = date + datetime.timedelta(days=int(daysToAvgOver/2))
         lastDateInWindow = date
         summ=0; count = 0
-        for j in range(userParams["avgOverDays"]):
+        for j in range(avgOverDays):
             d = lastDateInWindow - datetime.timedelta(days=j)
             dInt = int(d.strftime('%Y%m%d'))
             entry = ctp.loc[(ctp.date == dInt) & (ctp.state == state)][colKey]
@@ -100,8 +101,7 @@ def getEntryFromCTPData(ctpRows, state, date, colKey):
                 count += 1
             else:
                 print("Entry is empty: ", dInt, state, colKey)
-
-        if summ == 0: print(colKey, "for", state, "on", date, "averaged over", userParams["avgOverDays"], "days is zero")
+        if summ == 0: print(colKey, "for", state, "on", date, "averaged over", avgOverDays, "days is zero")
         return summ/count
 
 
