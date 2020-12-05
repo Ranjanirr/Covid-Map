@@ -206,6 +206,7 @@ def parseCLI():
     parser.add_argument("-TimeToQuar", type=int, default=lag)
 
     parser.add_argument("-methodsShow", action="store_true", help="For tabulating, show individual method results in addition to average")
+    parser.add_argument("-perMil", action="store_true", help="Show results on a per-million population basis (note, for -t, some are already per mil)")
 
     args = parser.parse_args()
 

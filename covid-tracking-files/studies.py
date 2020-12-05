@@ -196,6 +196,8 @@ def tabulateStateResults(states, showMethods=False):
 
     #print(tabulate(results, headers="keys", floatfmt=".2f", tablefmt="latex"))
     #sortedResults = sorted(results, key=operator.itemgetter(4))
+    print("\nNOTE: CASES, DEATHS AND INCIDENCE RATE ARE PER MILLION PEOPLE")
+    print("NOTE: CASES and DEATHS are CUMULATIVE; INCIDENCE RATE IS AVG CASES OVER LAST 14 DAYS\n")
     print(tabulate(results, headers="keys", floatfmt=".2f"))
     #print(tabulate(sortedResults, headers="keys", floatfmt=".2f"))
     if userParams["jsObj"]:
@@ -265,7 +267,7 @@ def tabulateRoleInfProbabilities(states):
 
         print("\\\\ \hline")
 
-def plotSpecificDataForStates(startDate, drange, states, parameter):
+def plotSpecificDataForStates(startDate, drange, states, parameter, perMil=False):
 
     for s in states:
         yvalues = []
@@ -277,8 +279,11 @@ def plotSpecificDataForStates(startDate, drange, states, parameter):
                 yval = 100.0*posInc/(posInc + negInc)
             else:
                 yval = dataIO.getEntryFromCTPData(ctpRows, s, date, parameter)
-            #print(date, ":", yval)
-            yvalues.append(yval)
+
+            if perMil:
+                yvalues.append((float(yval)*1000000.0)/statePopulation[s])
+            else:
+                yvalues.append(yval)
         plt.plot(drange, yvalues, label=s)
 
     dataIO.showPlot(parameter, "days", "value")

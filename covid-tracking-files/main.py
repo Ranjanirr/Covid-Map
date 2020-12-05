@@ -40,7 +40,7 @@ if args.dataview:
     drange = np.linspace(0, args.history, (args.history + 1))
     for s in stats:
         print("Viewing", s, "for states", args.states)
-        plotSpecificDataForStates(startDate, drange, userParams["selectedStates"], s)
+        plotSpecificDataForStates(startDate, drange, userParams["selectedStates"], s, args.perMil)
 
 if args.tabulate:
     print("Tabulating for states", userParams["selectedStates"])
