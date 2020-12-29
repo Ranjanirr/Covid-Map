@@ -8,9 +8,7 @@ def movingAverage(values, window):
 def getGrowthByMethod(region, method, dth_c, infec_c, dth_b, infec_b, refDate):
     if method == "A":
         midDate = refDate - datetime.timedelta(days=int(lag/2))
-        #R = dataIO.getEffRepFromData(rtliveRows, region, midDate)
-        R = dataIO.getEffRepFromData(rtliveRows, region, midDate)
-        #print(midDate, R)
+        R = dataIO.getEffRepFromData(region, midDate)
         G = R ** (1 / serialInterval)
     elif method == "B":
         G_total = infec_c / infec_b if infec_b != 0 else infec_c
@@ -29,10 +27,10 @@ def getTotalInfectionsInRegion(refDate, region, methodsToAvgOver, tqspace=lag):
 
     laggedDate = refDate - datetime.timedelta(days=lag)
 
-    dth_c = dataIO.getEntryFromCTPData(ctpRows, region, refDate, "deathIncrease")
-    infec_c = dataIO.getEntryFromCTPData(ctpRows, region, refDate, "positiveIncrease")
-    dth_b = dataIO.getEntryFromCTPData(ctpRows, region, laggedDate, "deathIncrease")
-    infec_b = dataIO.getEntryFromCTPData(ctpRows, region, laggedDate, "positiveIncrease")
+    dth_c = dataIO.getEntryFromCTPData(region, refDate, "deathIncrease")
+    infec_c = dataIO.getEntryFromCTPData(region, refDate, "positiveIncrease")
+    dth_b = dataIO.getEntryFromCTPData(region, laggedDate, "deathIncrease")
+    infec_b = dataIO.getEntryFromCTPData(region, laggedDate, "positiveIncrease")
 
     #print("info ", dth_c, infec_c, dth_b, infec_b)
 
@@ -42,7 +40,6 @@ def getTotalInfectionsInRegion(refDate, region, methodsToAvgOver, tqspace=lag):
     if dth_b < 0 or infec_b < 0:
         print("DATA ERROR: daily data for", region, "on or around", laggedDate, "is negative, suggest using later date")
         dth_b = max(dth_b, 0); infec_b = max(infec_b, 0)
-        #exit()
 
     laggedPhi = dth_c / IFR
 
@@ -60,10 +57,10 @@ def getInfectionsOnRefDateInRegion(refDate, region, methodsToAvgOver, tqspace=la
 
     laggedDate = refDate - datetime.timedelta(days=lag)
 
-    dth_c = dataIO.getEntryFromCTPData(ctpRows, region, refDate, "deathIncrease")
-    infec_c = dataIO.getEntryFromCTPData(ctpRows, region, refDate, "positiveIncrease")
-    dth_b = dataIO.getEntryFromCTPData(ctpRows, region, laggedDate, "deathIncrease")
-    infec_b = dataIO.getEntryFromCTPData(ctpRows, region, laggedDate, "positiveIncrease")
+    dth_c = dataIO.getEntryFromCTPData(region, refDate, "deathIncrease")
+    infec_c = dataIO.getEntryFromCTPData(region, refDate, "positiveIncrease")
+    dth_b = dataIO.getEntryFromCTPData(region, laggedDate, "deathIncrease")
+    infec_b = dataIO.getEntryFromCTPData(region, laggedDate, "positiveIncrease")
 
     if dth_c < 0 or infec_c < 0:
         print("DATA ERROR: daily data for", region, "on or around", refDate, "is negative, suggest using later date", dth_c, infec_c)

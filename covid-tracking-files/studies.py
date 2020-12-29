@@ -5,7 +5,6 @@ from tabulate import tabulate
 from params import *
 import model
 import json
-from math import ceil
 
 methColors = {
     "A": "b",
@@ -158,15 +157,15 @@ def tabulateStateResults(states, showMethods=False):
     for s in states:
         results["State"].append(s)
 
-        cumCases = dataIO.getEntryFromCTPData(ctpRows, s, userParams["consideredDate"], "positive")
+        cumCases = dataIO.getEntryFromCTPData(s, userParams["consideredDate"], "positive")
         cumCasesPerMil = float(cumCases)*1000000.0 / statePopulation[s]
         results["Cases"].append(int(cumCasesPerMil))
 
-        cumDeaths = dataIO.getEntryFromCTPData(ctpRows, s, userParams["consideredDate"], "death")
+        cumDeaths = dataIO.getEntryFromCTPData(s, userParams["consideredDate"], "death")
         cumDeathsPerMil = float(cumDeaths)*1000000.0 / statePopulation[s]
         results["Deaths"].append(int(cumDeathsPerMil))
 
-        infectionsOverPast14Days = dataIO.getEntryFromCTPData(ctpRows, s, userParams["consideredDate"], "positiveIncrease", 14)
+        infectionsOverPast14Days = dataIO.getEntryFromCTPData(s, userParams["consideredDate"], "positiveIncrease", 14)
         incidenceRate = (1000000.0*infectionsOverPast14Days)/statePopulation[s]
         results["IncidenceRate"].append(int(incidenceRate*100)/100.0)
 
@@ -209,44 +208,6 @@ def tabulateStateResults(states, showMethods=False):
 
     if showMethods: print("\nOver/under estimate:", ["{:.2f}".format(diffAvg[m]) for m in methodsToAvgOver])
 
-# def tabulateStateResultsMethods(states):
-#
-#     results = OrderedDict()
-#     results["State"] = []
-#     for m in methodsToAvgOver: results[m+"(%)"] = []
-#     results["InfProb(%)"] = []; results["ContBudg"] = []; results["ActiveInf"] = []; results["infOnDate"] = []
-#
-#     diffAvg = {x:0 for x in methodsToAvgOver}
-#     odds = {x:0 for x in methodsToAvgOver}
-#     for s in states:
-#         results["State"].append(s)
-#         oddsAvg = 100 * model.getInfecProbability(s, userParams["TP"], userParams["contacts"], methodsToAvgOver, tqspace=userParams["timeToQuar"])
-#         #results["InfProb"].append(str("{:.2f}".format(oddsAvg))+"%")
-#         results["InfProb(%)"].append(oddsAvg)
-#         activeInfections = model.getPhi_i(s, userParams["TP"], userParams["contacts"], ["A"], tqspace=userParams["timeToQuar"])
-#         results["ActiveInf"].append(ceil(activeInfections))
-#         infOnDate = model.getInfectionsOnRefDateInRegion(userParams["consideredDate"], s, ["A"], tqspace=lag)
-#         results["infOnDate"].append(ceil(infOnDate))
-#
-#         for method in methodsToAvgOver:
-#             odds[method] = 100 * model.getInfecProbability(s, userParams["TP"], userParams["contacts"], method)
-#             diffAvg[method] += (odds[method] - oddsAvg)
-#
-#             #results[method].append(str("{:.2f}".format(odds[method]))+"%")
-#             results[method+"(%)"].append(odds[method])
-#
-#         outcome, maxM = model.getContactsBudget(s, userParams["TP"], userParams["comfortProb"], methodsToAvgOver, tqspace=userParams["timeToQuar"])
-#         if outcome != "NO LIMIT":
-#             results["ContBudg"].append(int(maxM))
-#         else:
-#             results["ContBudg"].append(outcome)
-#
-#     #print(tabulate(results, headers="keys", floatfmt=".2f", tablefmt="latex"))
-#     #sortedResults = sorted(results, key=operator.itemgetter(4))
-#     print(tabulate(results, headers="keys", floatfmt=".2f"))
-#     #print(tabulate(sortedResults, headers="keys", floatfmt=".2f"))
-#
-#     print("\nOver/under estimate:", ["{:.2f}".format(diffAvg[m]) for m in methodsToAvgOver])
 
 def tabulateRoleInfProbabilities(states):
     scenarioVals = {
@@ -274,11 +235,11 @@ def plotSpecificDataForStates(startDate, drange, states, parameter, perMil=False
         for d in drange:
             date = startDate + datetime.timedelta(days=d)
             if parameter == "percentPositive":
-                posInc = dataIO.getEntryFromCTPData(ctpRows, s, date, "positiveIncrease")
-                negInc = dataIO.getEntryFromCTPData(ctpRows, s, date, "negativeIncrease")
+                posInc = dataIO.getEntryFromCTPData(s, date, "positiveIncrease")
+                negInc = dataIO.getEntryFromCTPData(s, date, "negativeIncrease")
                 yval = 100.0*posInc/(posInc + negInc)
             else:
-                yval = dataIO.getEntryFromCTPData(ctpRows, s, date, parameter)
+                yval = dataIO.getEntryFromCTPData(s, date, parameter)
 
             if perMil:
                 yvalues.append((float(yval)*1000000.0)/statePopulation[s])

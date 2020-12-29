@@ -2,9 +2,6 @@ import numpy as np
 import datetime
 import pandas as pd
 
-
-#earliestDate = datetime.date(2020, 3, 11)
-
 covid19StatesDataURL = "https://covidtracking.com/api/v1/states/daily.csv"
 rtLiveURL = "https://d14wlfuexuxgcm.cloudfront.net/covid/rt.csv"
 lag = 24
@@ -31,10 +28,6 @@ externalData = {
     "rtLiveFrame"    : pd.DataFrame(),
     "popFrame"        : pd.DataFrame()
 }
-
-ctpRows = []
-rtliveRows = []
-popRows = []
 
 statePopulation = {}
 
