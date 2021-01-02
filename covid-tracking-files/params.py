@@ -10,7 +10,7 @@ serialInterval = 4.2
 
 userParams = {
     "consideredDate" : datetime.date(2020, 10, 5),
-    "dateOfLastUpd"  : "2020-10-22",
+    "dateOfLastUpd"  : "2020-12-29",
     "earliestDate"   : "2020-04-01",
     "selectedStates" : ["MA", "TX"],
     "focusState"     : "MA",
@@ -20,7 +20,8 @@ userParams = {
     "TP"             : 0.1,
     "contacts"       : 100,
     "comfortProb"    : 0.05,
-    "jsObj"     : False
+    "outputType"     : "console",
+    "jsfile"         : "results.js"
 }
 
 externalData = {

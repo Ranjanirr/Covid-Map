@@ -16,7 +16,7 @@ def setModelParameters(args):
 
     #noUpdateNeeded = args.noupdateData or args.updateAsOf
     # dataIO.initData(not noUpdateNeeded)
-    dataIO.initData(args.updateData, prompt=True)
+    dataIO.initData(args.updateData)
 
     userParams["history"] = args.history
     userParams["avgOverDays"] = args.avgOverDays
@@ -36,6 +36,8 @@ def setModelParameters(args):
 
 
 def executeDataAnalyzer(args):
+
+    print("Executing DA!!")
 
     if (args.plot or args.dataview) and len(userParams["selectedStates"]) > 6:
         print("Too many states to plot, exiting...")
@@ -103,24 +105,56 @@ def executeDataAnalyzer(args):
 #     @cherrypy.expose
 #     def analyze(self, states):
 #         return covidModel(states)
-#
-# class StringGenerator(object):
-#     @cherrypy.expose
-#     def index(self):
-#         return open("index.html")
-#
-#     @cherrypy.expose
-#     def analyze(self, states):
-#         return covidModel(states)
-#
-# def covidModel(states):
-#     #return "States are" + states
-#     stateList = [k for k in states.split()]
-#     return tabulateStateResults(stateList)
+
+class Mapper(object):
+    @cherrypy.expose
+    def index(self):
+        f, d = dataIO.getLatestCSVFile("Data/", "ctp-")
+        if d != datetime.date.today():
+            dataIO.initData(update=True)
+
+            userParams["selectedStates"] = [k for k in list(statePopulation.keys()) if k not in statesToExclude]
+            userParams["outputType"] = "js"
+            userParams["jsfile"] = "public/js/results.js"
+
+            print("\nTabulating for states\n", userParams["selectedStates"])
+            tabulateStateResults(userParams["selectedStates"])
+
+        return open("index.html")
+
+    @cherrypy.expose
+    def analyze(self, states):
+        return covidModel(states)
+
+def covidModel(states):
+    #return "States are" + states
+    stateList = [k for k in states.split()]
+    return tabulateStateResults(stateList)
+
+# def test():
+#     f, d = dataIO.getLatestCSVFile("Data/", "ctp-")
+#     if d != datetime.date.today():
+#         print("Doesn't work")
+#     else:
+#         print("Works")
+
 
 
 if __name__ == "__main__":
-    args = dataIO.parseCLI()
-    setModelParameters(args)
-    executeDataAnalyzer(args)
+    # test()
+    # exit()
+
+    conf = {
+        '/': {
+            'tools.sessions.on': True,
+            'tools.staticdir.root': os.path.abspath(os.getcwd())
+        },
+        '/static': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': './public'
+        }
+    }
+    print("Starting Server!!")
+    cherrypy.quickstart(Mapper(), '/', conf)
+
 

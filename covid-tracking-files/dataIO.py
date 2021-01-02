@@ -86,6 +86,7 @@ def initData(update=False):
 
     if update:
         updateConfirm = input("Proceeding to update data csv files. Please confirm (y/n)[n]: ")
+
         if updateConfirm == "y" or updateConfirm == "Y":
             print("Updating ...")
             ctpPath = directory + "ctp-" + str(datetime.date.today()) + ".csv"
@@ -95,7 +96,7 @@ def initData(update=False):
             userParams["dateOfLastUpd"] = datetime.date.today().isoformat()
             userParams["consideredDate"] = datetime.date.today() - datetime.timedelta(1)
         else:
-            print("Use -noupdate option to use existing data files. For now, using latest available")
+            print("OK, got it... will not pull data. For now, using latest available")
 
             ctpFile, ctpDate =  getLatestCSVFile(directory, "ctp-")
             rtFile, rtDate = getLatestCSVFile(directory, "rt-")
@@ -136,7 +137,8 @@ def getLatestCSVFile(direc, prefix):
 def parseCLI():
     parser = ArgumentParser(description="Area- and Time-specific Infection Probability Model")
 
-    parser.add_argument("-noupdateData", action="store_true", help="Fetch latest data from Covid tracking and rtlive sites")
+    # parser.add_argument("-noupdateData", action="store_true", help="Fetch latest data from Covid tracking and rtlive sites")
+    parser.add_argument("-updateData", action="store_true", help="Fetch latest data from Covid tracking and rtlive sites")
     parser.add_argument("-updateAsOf", type=str, help="Use data files pulled on")
 
     parser.add_argument("-interactive", action="store_true", help="Interactive mode with user prompted input")
