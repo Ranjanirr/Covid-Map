@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>U.S. COVID MAP</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700|Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Bitter" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/stylerr.css">
+
+</head>
+<!-- map.js -->
+<script type="text/javascript" src="https://s3.amazonaws.com/media.skillcrush.com/skillcrush/wp-content/uploads/2017/11/map.js"></script>
+<!-- custom js (uncomment when you've added your custom script.js file) -->
+<script type="text/javascript" src="/static/js/results.js"></script>
+<script type="text/javascript" src="/static/js/corona.js"></script>
+
+
+<body onload="onLoad();">
+<div class="page">
+    <header>
+        <h1>U.S. COVID MAP</h1>
+        <h3>Infection Probablilty Percent: Percent of people in state that are infected</h3>
+        <h3>Contact Budget: Number of people you can contact before getting infected</h3>
+    </header>
+    <div class="map-container">
+
+        <canvas id="map_canvas" width="800" height="550" style="position:relative;">
+        </canvas>
+
+        <table id='stateResults' style="position:absolute; bottom:10px; right:10px;">
+            <theader>
+                <tr>
+                    <th>STATE NAME</th>
+                    <th>Abbreviation</th>
+                </tr>
+            </theader>
+            <tbody>
+                <tr>
+                    <td class="name-1">NAME1</td>
+                    <td class="name-1">RESULTS1</td>
+                </tr>
+                <tr>
+                    <td class="name-2">NAME2</td>
+                    <td class="name-2">RESULTS2</td>
+                </tr>
+           
+            </tbody>
+        </table>
+
+    </div>
+    <br clear="all">
+    <footer>
+        <p>&copy; Skillcrush 2016 <span>//</span> HTML5 Map Created By: <a href="http://dougx.net/map/usmap.html" target="_blank">DougX.net</a></p>
+    </footer>
+
+</div>
+
+<!--
+JavaScript files are added just before </body> so all HTML loads first.
+This can make your page appear to load faster and helps avoid missing HTML errors.
+ -->
+
+
+</body>
+</html>
