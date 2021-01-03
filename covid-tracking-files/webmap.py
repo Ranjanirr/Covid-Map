@@ -111,7 +111,7 @@ class Mapper(object):
     def index(self):
         f, d = dataIO.getLatestCSVFile("Data/", "ctp-")
         if d != datetime.date.today():
-            dataIO.initData(update=True)
+            dataIO.initData(update=True, prompt=False)
 
             userParams["selectedStates"] = [k for k in list(statePopulation.keys()) if k not in statesToExclude]
             userParams["outputType"] = "js"

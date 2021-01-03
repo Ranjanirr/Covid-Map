@@ -1,10 +1,16 @@
-import matplotlib.pyplot as plt
+
 import dataIO
 from collections import OrderedDict
 from tabulate import tabulate
 from params import *
 import model
 import json
+if userParams["outputType"] == "console":
+    import matplotlib.pyplot as plt
+
+counter = 1
+gridOn = True
+SAVE = False
 
 methColors = {
     "A": "b",
@@ -24,7 +30,7 @@ def study_pim_vs_m_CompareMethodsForGivenRegion(region, mspace, methodList):
         plt.plot(mspace, pim, methColors[method], label="Method-" + method)
 
     figTitle = "Infection Prob vs contacts for " + region + ": p_t=" + str(int(userParams["TP"]*100)) + "%"
-    dataIO.showPlot(figTitle, "Number of contacts (m)", "Infection probability")
+    showPlot(figTitle, "Number of contacts (m)", "Infection probability")
 
 def study_pim_vs_p_t_CompareMethodsForGivenRegion(region, ptspace, methodList):
     for method in methodList:
@@ -32,7 +38,7 @@ def study_pim_vs_p_t_CompareMethodsForGivenRegion(region, ptspace, methodList):
         plt.plot(ptspace, pim, methColors[method], label="Method-" + method)
 
     figTitle = "Infection Prob vs Transfer Prob for " + region + ": " + str(userParams["contacts"]) + " contacts"
-    dataIO.showPlot(figTitle, "Transfer probability (p_t)", "Infection probability")
+    showPlot(figTitle, "Transfer probability (p_t)", "Infection probability")
 
 ##########
 
@@ -43,7 +49,7 @@ def study_pim_vs_m_CompareRegions(regionList, mspace, methods):
         plt.plot(mspace, pim, label=region)
 
     figTitle = "Infection Probability vs contacts:"  + " p_t=" + str(int(userParams["TP"]*100)) + "%"
-    dataIO.showPlot(figTitle, "Number of contacts (m)", "Infection probability")
+    showPlot(figTitle, "Number of contacts (m)", "Infection probability")
 
 def study_pim_vs_m_Compare_p_t(region, mspace, methods, p_t_values):
     for pt in p_t_values:
@@ -51,7 +57,7 @@ def study_pim_vs_m_Compare_p_t(region, mspace, methods, p_t_values):
         plt.plot(mspace, pim, label="p_t = " + str(pt))
 
     figTitle = "Infection Probability vs contacts for " + region + " for different p_t values"
-    dataIO.showPlot(figTitle, "Number of contacts (m)", "Infection probability")
+    showPlot(figTitle, "Number of contacts (m)", "Infection probability")
 
 # def study_pim_vs_p_t_CompareRegions(regionList, ptspace, method):
 #     for region in regionList:
@@ -73,7 +79,7 @@ def study_pim_vs_m_CompareQuar(region, mspace, methods, quarValues):
         plt.plot(mspace, pim, label=["No Quar" if tq==lag else "Quar aft 5d"])
 
     figTitle = "Infection Probability vs contacts for " + region + ": p_t=" + str(int(userParams["TP"] * 100)) + "%"
-    dataIO.showPlot(figTitle, "Number of contacts (m)", "Infection probability")
+    showPlot(figTitle, "Number of contacts (m)", "Infection probability")
 
 def study_pim_vs_tq_CompareRegions(regionList, tqspace, methods):
     for region in regionList:
@@ -82,7 +88,7 @@ def study_pim_vs_tq_CompareRegions(regionList, tqspace, methods):
 
     figTitle = "Infection Probability vs days-to-quarantine " + ": p_t=" + str(int(userParams["TP"] * 100)) + "%"
     plt.xlim(24,0)
-    dataIO.showPlot(figTitle, "Days to quarantine (t_q)", "Infection probability")
+    showPlot(figTitle, "Days to quarantine (t_q)", "Infection probability")
 
 ##########
 
@@ -95,7 +101,7 @@ def study_Mpc_vs_pc_CompareRegions(regionList, pcspace, methods):
             print("Contact budget not limited for", region)
 
     figTitle = "Contacts budget vs comfort probability " + ": p_t=" + str(int(userParams["TP"] * 100)) + "%"
-    dataIO.showPlot(figTitle, "Comfort probability (p_c)", "Contacts budget")
+    showPlot(figTitle, "Comfort probability (p_c)", "Contacts budget")
 
 def study_Mpc_vs_p_t_ComparePc(region, ptspace, methods, pcValues):
     for pc in pcValues:
@@ -106,7 +112,7 @@ def study_Mpc_vs_p_t_ComparePc(region, ptspace, methods, pcValues):
             print("Contact budget not limited for", region)
 
     figTitle = "Contacts budget vs transfer probability for " + region
-    dataIO.showPlot(figTitle, "Transfer probability (p_t)", "Contacts budget")
+    showPlot(figTitle, "Transfer probability (p_t)", "Contacts budget")
 
 ##########
 
@@ -116,7 +122,7 @@ def study_pim_vs_m_compareDays(region, mspace, methods, dateValues):
         plt.plot(mspace, pim, label=date)
 
     figTitle = "Infection Probability vs contacts for " + region + ": p_t=" + str(int(userParams["TP"] * 100)) + "%"
-    dataIO.showPlot(figTitle, "Number of contacts (m)",  "Infection probability")
+    showPlot(figTitle, "Number of contacts (m)",  "Infection probability")
 
 
 def study_pim_vs_days_CompareRegions(regionList, drange, methods):
@@ -135,7 +141,7 @@ def study_pim_vs_days_CompareRegions(regionList, drange, methods):
 
     figTitle = "Infection Prob. history " + ": " + str(userParams["contacts"]) + " contacts" + " p_t=" + \
                str(int(userParams["TP"] * 100)) + "%, " + str(movAvgWin) + " day avg"
-    dataIO.showPlot(figTitle, "Days since" + str(userParams["consideredDate"] - datetime.timedelta(days=userParams["history"])),
+    showPlot(figTitle, "Days since" + str(userParams["consideredDate"] - datetime.timedelta(days=userParams["history"])),
                     "Infection probability")
 
 #############################################################################################
@@ -254,6 +260,30 @@ def plotSpecificDataForStates(startDate, drange, states, parameter, perMil=False
                 yvalues.append(yval)
         plt.plot(drange, yvalues, label=s)
 
-    dataIO.showPlot(parameter, "days", "value")
+    showPlot(parameter, "days", "value")
 
 #######################################################################
+
+def showPlot(title, xlabel, ylabel):
+    global counter
+
+    plt.legend(loc="upper right")
+    plt.grid(gridOn)
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+
+    if SAVE:
+        fileStr = title.replace(" ", "-")
+        fileStr = fileStr.replace("%","")
+        fileStr = fileStr.replace("=", "-")
+        fileStr = fileStr.replace(":", "")
+
+        directory = "Plots/" + str(datetime.date.today())
+        os.makedirs(directory, exist_ok=True)
+        os.chdir(directory)
+        plt.savefig("fig" + str(counter) + "-" + fileStr + ".png", format="PNG")
+        plt.clf()
+        counter += 1
+    else:
+        plt.show()

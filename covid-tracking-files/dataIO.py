@@ -1,14 +1,8 @@
-import matplotlib.pyplot as plt
+
 import os
 from params import *
 from argparse import ArgumentParser
 import urllib.request
-
-counter = 1
-
-SAVE = False
-latexTable = False
-gridOn = True
 
 def convert_Y_M_D(yyyy_mm_dd):
     return datetime.date.fromisoformat(yyyy_mm_dd)
@@ -55,37 +49,40 @@ def initStatePopulations(popFrame):
         statePopulation[abbrevList[i]] = int(popList[i])
 
 
-def showPlot(title, xlabel, ylabel):
-    global counter
+# def showPlot(title, xlabel, ylabel):
+#     global counter
+#
+#     plt.legend(loc="upper right")
+#     plt.grid(gridOn)
+#     plt.title(title)
+#     plt.xlabel(xlabel)
+#     plt.ylabel(ylabel)
+#
+#     if SAVE:
+#         fileStr = title.replace(" ", "-")
+#         fileStr = fileStr.replace("%","")
+#         fileStr = fileStr.replace("=", "-")
+#         fileStr = fileStr.replace(":", "")
+#
+#         directory = "Plots/" + str(datetime.date.today())
+#         os.makedirs(directory, exist_ok=True)
+#         os.chdir(directory)
+#         plt.savefig("fig" + str(counter) + "-" + fileStr + ".png", format="PNG")
+#         plt.clf()
+#         counter += 1
+#     else:
+#         plt.show()
 
-    plt.legend(loc="upper right")
-    plt.grid(gridOn)
-    plt.title(title)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-
-    if SAVE:
-        fileStr = title.replace(" ", "-")
-        fileStr = fileStr.replace("%","")
-        fileStr = fileStr.replace("=", "-")
-        fileStr = fileStr.replace(":", "")
-
-        directory = "Plots/" + str(datetime.date.today())
-        os.makedirs(directory, exist_ok=True)
-        os.chdir(directory)
-        plt.savefig("fig" + str(counter) + "-" + fileStr + ".png", format="PNG")
-        plt.clf()
-        counter += 1
-    else:
-        plt.show()
-
-def initData(update=False):
+def initData(update=False, prompt=True):
 
     directory = "Data/"
     os.makedirs(directory, exist_ok=True)
 
     if update:
-        updateConfirm = input("Proceeding to update data csv files. Please confirm (y/n)[n]: ")
+        if prompt:
+            updateConfirm = input("Proceeding to update data csv files. Please confirm (y/n)[n]: ")
+        else:
+            updateConfirm = "y"
 
         if updateConfirm == "y" or updateConfirm == "Y":
             print("Updating ...")
