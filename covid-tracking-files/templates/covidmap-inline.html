@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>U.S. COVID MAP</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700|Montserrat:400,700' rel='stylesheet' type='text/css'>
+<link href="https://fonts.googleapis.com/css?family=Bitter" rel="stylesheet">
+
+<style>
+.page {
+  width: 80%;
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: left;
+  background-color: #eee;
+}
+
+body {
+  font: 16px/26px 'Open Sans', Helvetica, Arial, sans-serif;
+  color: #0E2F62;
+  margin: 0px;
+  padding: 0px;
+  background-color: #eee;
+}
+
+header {
+  padding: 0.75em 0;
+  text-align: center;
+  font-family: 'Montserrat', serif;
+  font-size: 16px;
+  text-shadow: 1px 1px #ccc;
+}
+
+.map-container {
+  width:800px;
+  margin: 0 auto;
+  position:relative;
+}
+
+#stateResults {
+  width: 25%;
+  font: 12px/16px 'Open Sans', Helvetica, Arial, sans-serif;
+  color: #454545;
+}
+
+#countryResults {
+  width: 95%;
+  font: 16px/28px 'Open Sans', Helvetica, Arial, sans-serif;
+  color: #454545;
+}
+#stateResults, #countryResults {
+  border-collapse: collapse;
+  background-color: #f2f2f2;
+  -webkit-box-shadow: 1px 1px 1px 1px rgba(204,204,204,0.5);
+  -moz-box-shadow: 1px 1px 1px 1px rgba(204,204,204,0.5);
+  box-shadow: 1px 1px 1px 1px rgba(204,204,204,0.5);
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+#stateResults th{
+  background-color: #3b3b3b;
+  color: white;
+}
+#countryResults th {
+  background-color: #f16059;
+  color: white;
+}
+.name-1 {
+  background-color: rgb(132,17,11);
+  color: white;
+}
+.name-2 {
+  background-color: rgb(245, 141, 136);
+  color: white;
+}
+.winner {
+  background-color: #f16059;
+  color: white;
+}
+
+footer p {
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  text-align: center;
+  text-transform: uppercase;
+}
+footer span {
+  color: #f16059;
+  padding: 0 5px;
+}
+
+    </style>
+    
+</head>
+<!-- map.js -->
+<script type="text/javascript" src="https://s3.amazonaws.com/media.skillcrush.com/skillcrush/wp-content/uploads/2017/11/map.js"></script>
+<!-- custom js (uncomment when you've added your custom script.js file) -->
+<script type="text/javascript" src="results.js"></script>
+<script type="text/javascript">
+
+var prevState = 0;
+var createStateData = function(name, partyColor)
+{
+  var stateData = {}; //creates an object that stores the name of the data and the data itself
+  stateData.name = name;
+  stateData.theResults = null;
+  return stateData;
+  
+};
+/*Function that changes the table whenever a state is moused over, called in map.js*/
+var setStateResults = function(state)
+{
+  theStates[prevState].rgbColor = [175,175,175];
+  
+  theStates[state].rgbColor = [11, 32, 57];
+ 
+  prevState = state;
+  var stateInfoTable = document.getElementById('stateResults');
+  var header = stateInfoTable.children[0].children[0];
+  header.children[0].innerText = theStates[state].nameFull;
+  header.children[1].innerText = theStates[state].nameAbbrev;
+  var infectionData = stateInfoTable.children[1].children[0];
+  var contactData = stateInfoTable.children[1].children[1];
+ 
+  infectionData.children[0].innerText = "Infection Probability Percent";
+  infectionData.children[1].innerText = infection.theResults[state]
+  contactData.children[0].innerText = "Contact Budget";
+  contactData.children[1].innerText = contact.theResults[state]
+
+};
+  
+//Initiates the original objects for infection and contact
+var infection = createStateData("Infection Probability", [132, 17, 11]);
+var contact = createStateData("Contact Budget", [245, 141, 136]);
+  
+//Gets results from the json and stores them in variables
+var obj = JSON.parse(JSON.stringify(results));
+//var obj = JSON.parse(results);
+infection.theResults = obj.InfChance;
+contact.theResults = obj.ContactBudget;
+
+</script>
+
+
+<body onload="onLoad();">
+<div class="page">
+    <header>
+        <h1>U.S. COVID MAP</h1>
+        <h3>Infection Probablilty Percent: Percent of people in state that are infected</h3>
+        <h3>Contact Budget: Number of people you can contact before getting infected</h3>
+    </header>
+    <div class="map-container">
+
+        <canvas id="map_canvas" width="800" height="550" style="position:relative;">
+        </canvas>
+
+        <table id='stateResults' style="position:absolute; bottom:10px; right:10px;">
+            <theader>
+                <tr>
+                    <th>STATE NAME</th>
+                    <th>Abbreviation</th>
+                </tr>
+            </theader>
+            <tbody>
+                <tr>
+                    <td class="name-1">NAME1</td>
+                    <td class="name-1">RESULTS1</td>
+                </tr>
+                <tr>
+                    <td class="name-2">NAME2</td>
+                    <td class="name-2">RESULTS2</td>
+                </tr>
+           
+            </tbody>
+        </table>
+
+    </div>
+    <br clear="all">
+    <footer>
+        <p>&copy; Skillcrush 2016 <span>//</span> HTML5 Map Created By: <a href="http://dougx.net/map/usmap.html" target="_blank">DougX.net</a></p>
+    </footer>
+
+</div>
+
+<!--
+JavaScript files are added just before </body> so all HTML loads first.
+This can make your page appear to load faster and helps avoid missing HTML errors.
+ -->
+
+
+</body>
+</html>

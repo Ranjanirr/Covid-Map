@@ -16,7 +16,7 @@ class Mapper(object):
             print("\nTabulating for states\n", userParams["selectedStates"])
             tabulateStateResults(userParams["selectedStates"])
 
-        return open("index.html")
+        return open("covidmap.html")
 
 
 if __name__ == "__main__":
