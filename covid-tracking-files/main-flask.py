@@ -49,7 +49,7 @@ def webmapper():
         tabulateStateResults(userParams["selectedStates"])
 
         
-    return render_template("covidmap.html")
+    return render_template("covidmap-inline.html")
 
 
 if __name__ == "__main__":
