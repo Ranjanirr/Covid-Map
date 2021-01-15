@@ -98,7 +98,7 @@ footer span {
 <!-- map.js -->
 <script type="text/javascript" src="https://s3.amazonaws.com/media.skillcrush.com/skillcrush/wp-content/uploads/2017/11/map.js"></script>
 <!-- custom js (uncomment when you've added your custom script.js file) -->
-<script type="text/javascript" src="results.js"></script>
+<script type="text/javascript" src="/tmp/results.js"></script>
 <script type="text/javascript">
 
 var prevState = 0;
@@ -149,8 +149,9 @@ contact.theResults = obj.ContactBudget;
 <div class="page">
     <header>
         <h1>U.S. COVID MAP</h1>
-        <h3>Infection Probablilty Percent: Percent of people in state that are infected</h3>
-        <h3>Contact Budget: Number of people you can contact before getting infected</h3>
+        <h3>Infection Probablilty: Probability of getting infected in the state after 100 contacts</h3>
+        <h3>Contact Budget: Number of people you can contact if you want less than 5% chance of infection</h3>
+	<h3>Assumption: Transmission probability per contact is 0.1</h3>
     </header>
     <div class="map-container">
 

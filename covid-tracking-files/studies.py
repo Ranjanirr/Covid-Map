@@ -217,7 +217,8 @@ def tabulateStateResults(states, showMethods=False):
         if userParams["outputType"] == "js":
             resStr = json.dumps(results)
             jsStr = "results = " + resStr + ";"
-            with open(userParams["jsfile"], "w") as jf:
+            with open(userParams["jsfile"], "w+") as jf:
+                print("Dumping results.js into jsfile\n")
                 #json.dump(results, jf)
                 print(jsStr, file=jf)
 
