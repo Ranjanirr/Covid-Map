@@ -1,6 +1,4 @@
 from studies import *
-import cherrypy
-import os
 
 def setModelParameters(args):
     # args = dataIO.parseCLI()
@@ -85,41 +83,27 @@ def executeDataAnalyzer(args):
             study_pim_vs_days_CompareRegions(selectedStates, drange, ["A"])
             #study_pim_vs_days_CompareRegions(selectedStates, drange, ["A"], movAvgWin=1)
 
-# class StringGenerator(object):
-#     @cherrypy.expose
-#     def index(self):
-#         return """<html>
-#           <head>
-#             <link href="/static/css/rrstyle.css" rel="stylesheet">
-#           </head>
-#           <body>
-#             <form method="get" action="analyze">
-#               <input type="text" value="MA NY CT NH" name="states" />
-#               <button type="submit">Compute</button>
-#             </form>
-#           </body>
-#         </html>"""
-#
-#     @cherrypy.expose
-#     def analyze(self, states):
-#         return covidModel(states)
-#
-# class StringGenerator(object):
-#     @cherrypy.expose
-#     def index(self):
-#         return open("index.html")
-#
-#     @cherrypy.expose
-#     def analyze(self, states):
-#         return covidModel(states)
-#
-# def covidModel(states):
-#     #return "States are" + states
-#     stateList = [k for k in states.split()]
-#     return tabulateStateResults(stateList)
-
-
 if __name__ == "__main__":
+
+    # deltaSecsForUpdate = 24*3600
+    # update = True
+    # import time
+    # import os
+    #
+    # # try:
+    # #     modTimeSinceEpoch = os.path.getmtime("alpha.js")
+    # #     if (time.time() - modTimeSinceEpoch) < deltaSecsForUpdate:
+    # #         update = False
+    # # except OSError:
+    # #     print("File not found")
+    #
+    # modTimeSinceEpoch = os.path.getmtime("alpha.js")
+    # if (time.time() - modTimeSinceEpoch) < deltaSecsForUpdate:
+    #     update = False
+    #
+    # print(update)
+    # exit()
+
     args = dataIO.parseCLI()
     setModelParameters(args)
     executeDataAnalyzer(args)

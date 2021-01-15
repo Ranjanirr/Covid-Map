@@ -1,20 +1,37 @@
-rom flask import Flask, render_template
+from flask import Flask, render_template
 from studies import *
+import time
+import os
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app                                                                             # called `app` in `main.py`.                                                                                                                                                          
 app = Flask(__name__, static_folder="/tmp")
 #app = Flask(__name__)                                                                                                                                                                
 bypass=False
-alwaysUpdate=True
+alwaysUpdate=False
 
 @app.route("/", methods=["GET"])
 def webmapper():
 
     print("In webmapper\n")
 
-    f, d = dataIO.getLatestCSVFile("Data/", "ctp-")
+    #f, d = dataIO.getLatestCSVFile("Data/", "ctp-")
 
-    if (d != datetime.date.today() and not bypass) or alwaysUpdate:
-        #dataIO.initData(update=True, prompt=False)                                                                                                                                   
+    deltaSecsForUpdate = 24 * 3600
+    updateNow = True
+
+    try:
+        modTimeSinceEpoch = os.path.getmtime("/tmp/results.js")
+        print("time since epoch:", modTimeSinceEpoch)
+        if (time.time() - modTimeSinceEpoch) < deltaSecsForUpdate:
+            updateNow = False
+    except OSError:
+        updateNow = True
+        print("No file found\n")
+
+    update = updateNow or alwaysUpdate
+    print("Update is", update)
+
+    if (not bypass) and update:
+        print("Updating data\n")
         externalData["ctpFrame"] = pd.read_csv(covid19StatesDataURL)
         externalData["rtLiveFrame"] = pd.read_csv(rtLiveURL)
         externalData["popFrame"] = pd.read_csv("Data/census-state-pop-abbrev.csv")
