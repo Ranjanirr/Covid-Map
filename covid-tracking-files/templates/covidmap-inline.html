@@ -68,11 +68,11 @@ th, td {
   background-color: #f16059;
   color: white;
 }
-.name-1 {
+.name-1, .name-3, .name-5 {
   background-color: rgb(132,17,11);
   color: white;
 }
-.name-2 {
+.name-2, .name-4 {
   background-color: rgb(245, 141, 136);
   color: white;
 }
@@ -122,26 +122,40 @@ var setStateResults = function(state)
   var header = stateInfoTable.children[0].children[0];
   header.children[0].innerText = theStates[state].nameFull;
   header.children[1].innerText = theStates[state].nameAbbrev;
-  var infectionData = stateInfoTable.children[1].children[0];
-  var contactData = stateInfoTable.children[1].children[1];
+  var infectionData = stateInfoTable.children[1].children[3];
+  var contactData = stateInfoTable.children[1].children[4];
+  var casesData = stateInfoTable.children[1].children[0];
+  var deathsData = stateInfoTable.children[1].children[1];
+  var incidenceData = stateInfoTable.children[1].children[2];
  
   infectionData.children[0].innerText = "Infection Probability";
   infectionData.children[1].innerText = infection.theResults[state]
   contactData.children[0].innerText = "Contact Budget";
   contactData.children[1].innerText = contact.theResults[state]
+  casesData.children[0].innerText = "Total cases"
+  casesData.children[1].innerText = cases.theResults[state]
+  deathsData.children[0].innerText = "Total deaths"
+  deathsData.children[1].innerText = deaths.theResults[state]
+  incidenceData.children[0].innerText = "Incidence rate"
+  incidenceData.children[1].innerText = incidence.theResults[state]
 
 };
   
 //Initiates the original objects for infection and contact
 var infection = createStateData("Infection Probability", [132, 17, 11]);
 var contact = createStateData("Contact Budget", [245, 141, 136]);
+var cases = createStateData("Total Cases", [132, 17, 11]);
+var deaths = createStateData("Total Deaths", [245, 141, 136]);
+var incidence = createStateData("Incidence rate", [132, 17, 11]);
   
 //Gets results from the json and stores them in variables
 var obj = JSON.parse(JSON.stringify(results));
 //var obj = JSON.parse(results);
 infection.theResults = obj.InfChance;
 contact.theResults = obj.ContactBudget;
-
+cases.theResults = obj.Cases;
+deaths.theResults = obj.Deaths;
+incidence.theResults = obj.IncidenceRate;
 </script>
 
 
@@ -158,7 +172,7 @@ contact.theResults = obj.ContactBudget;
         <canvas id="map_canvas" width="800" height="550" style="position:relative;">
         </canvas>
 
-        <table id='stateResults' style="position:absolute; bottom:10px; right:10px;">
+        <table id='stateResults' style="position:absolute; bottom:0px; left:-150px;">
             <theader>
                 <tr>
                     <th>STATE NAME</th>
@@ -167,12 +181,24 @@ contact.theResults = obj.ContactBudget;
             </theader>
             <tbody>
                 <tr>
-                    <td class="name-1">NAME1</td>
-                    <td class="name-1">RESULTS1</td>
+                    <td class="name-1">Total cases</td>
+                    <td class="name-1"></td>
                 </tr>
                 <tr>
-                    <td class="name-2">NAME2</td>
-                    <td class="name-2">RESULTS2</td>
+                    <td class="name-2">Total Deaths</td>
+                    <td class="name-2"></td>
+                </tr>
+                <tr>
+                    <td class="name-3">Incidence Rate</td>
+                    <td class="name-3"></td>
+                </tr>
+                <tr>
+                    <td class="name-4">Infection Probability</td>
+                    <td class="name-4"></td>
+                </tr>
+                <tr>
+                    <td class="name-5">Contact Budget</td>
+                    <td class="name-5"></td>
                 </tr>
            
             </tbody>
