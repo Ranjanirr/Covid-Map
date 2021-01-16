@@ -20,7 +20,7 @@ userParams = {
     "TP"             : 0.1,
     "contacts"       : 100,
     "comfortProb"    : 0.05,
-    "outputType"     : "web",
+    "outputType"     : "js",
     "jsfile"         : "results.js"
 }
 
@@ -43,6 +43,11 @@ tqrange = np.linspace(24, 0, 24)
 pcrange = np.linspace(0.01, 0.1, 10)
 
 NULLL = -1
+
+resultsCache = {
+    "lastUpdate" : datetime.date(2020, 1, 1),
+    "results"  : []
+}
 
 
 

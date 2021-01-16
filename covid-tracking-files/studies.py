@@ -199,21 +199,49 @@ def tabulateStateResults(states, showMethods=False):
 
                 results[method+"(%)"].append(odds[method])
 
-    #print(tabulate(results, headers="keys", floatfmt=".2f", tablefmt="latex"))
-    #sortedResults = sorted(results, key=operator.itemgetter(4))
+    resultsCache["results"] = results
+    resultsCache["lastUpdate"] = datetime.datetime.now()
+
+    outputResults(results, showMethods, diffAvg)
+
+    # #print(tabulate(results, headers="keys", floatfmt=".2f", tablefmt="latex"))
+    # #sortedResults = sorted(results, key=operator.itemgetter(4))
+    # print("\nNOTE: CASES, DEATHS AND INCIDENCE RATE ARE PER MILLION PEOPLE")
+    # print("NOTE: CASES and DEATHS are CUMULATIVE; INCIDENCE RATE IS AVG CASES OVER LAST 14 DAYS\n")
+    #
+    # #print(tabulate(results, headers="keys", floatfmt=".2f"))
+    #
+    # tableStr = tabulate(results, headers="keys", floatfmt=".2f")
+    # if userParams["outputType"] == "htmlreturn":
+    #     webStr = tableStr.replace("\n", "<br/>")
+    #     newWebStr = "<pre>" + webStr + "</pre>"
+    #     return newWebStr
+    # else:
+    #     print(tableStr)
+    #     if showMethods: print("\nOver/under estimate:", ["{:.2f}".format(diffAvg[m]) for m in methodsToAvgOver])
+    #     if userParams["outputType"] == "js":
+    #         resStr = json.dumps(results)
+    #         jsStr = "results = " + resStr + ";"
+    #         with open(userParams["jsfile"], "w+") as jf:
+    #             print("Dumping results.js into jsfile\n")
+    #             #json.dump(results, jf)
+    #             print(jsStr, file=jf)
+
+def outputResults(results, showMethods, diffAvg):
+
     print("\nNOTE: CASES, DEATHS AND INCIDENCE RATE ARE PER MILLION PEOPLE")
     print("NOTE: CASES and DEATHS are CUMULATIVE; INCIDENCE RATE IS AVG CASES OVER LAST 14 DAYS\n")
 
-    #print(tabulate(results, headers="keys", floatfmt=".2f"))
-
     tableStr = tabulate(results, headers="keys", floatfmt=".2f")
-    if userParams["outputType"] == "web":
+
+    if userParams["outputType"] == "htmlreturn":
         webStr = tableStr.replace("\n", "<br/>")
         newWebStr = "<pre>" + webStr + "</pre>"
         return newWebStr
     else:
         print(tableStr)
         if showMethods: print("\nOver/under estimate:", ["{:.2f}".format(diffAvg[m]) for m in methodsToAvgOver])
+
         if userParams["outputType"] == "js":
             resStr = json.dumps(results)
             jsStr = "results = " + resStr + ";"
@@ -221,7 +249,6 @@ def tabulateStateResults(states, showMethods=False):
                 print("Dumping results.js into jsfile\n")
                 #json.dump(results, jf)
                 print(jsStr, file=jf)
-
 
 def tabulateRoleInfProbabilities(states):
     scenarioVals = {
