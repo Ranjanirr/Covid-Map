@@ -85,25 +85,6 @@ def executeDataAnalyzer(args):
 
 if __name__ == "__main__":
 
-    # deltaSecsForUpdate = 24*3600
-    # update = True
-    # import time
-    # import os
-    #
-    # # try:
-    # #     modTimeSinceEpoch = os.path.getmtime("alpha.js")
-    # #     if (time.time() - modTimeSinceEpoch) < deltaSecsForUpdate:
-    # #         update = False
-    # # except OSError:
-    # #     print("File not found")
-    #
-    # modTimeSinceEpoch = os.path.getmtime("alpha.js")
-    # if (time.time() - modTimeSinceEpoch) < deltaSecsForUpdate:
-    #     update = False
-    #
-    # print(update)
-    # exit()
-
     args = dataIO.parseCLI()
     setModelParameters(args)
     executeDataAnalyzer(args)
