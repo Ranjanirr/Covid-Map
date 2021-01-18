@@ -92,6 +92,54 @@ footer span {
   padding: 0 5px;
 }
 
+/* MS style */
+ /* Font Definitions */                                                                                                                                    
+ @font-face                                                                                                                                                
+        {font-family:Wingdings;
+        panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+        {font-family:"Cambria Math";
+        panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+        {font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal                                                                                                                  
+        {margin:0in;
+ 	margin-bottom:.0001pt;
+        font-size:12.0pt;
+	font-family:"Calibri",sans-serif;}
+a:link, span.MsoHyperlink
+        {color:#0563C1;
+        text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:#954F72;
+        text-decoration:underline;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph                                                                                              
+        {margin-top:0in;
+        margin-right:0in;
+        margin-bottom:0in;
+	margin-left:.5in;
+        margin-bottom:.0001pt;
+        font-size:12.0pt;
+        font-family:"Calibri",sans-serif;}
+p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst                                                                   
+        {margin-top:0in;
+        margin-right:0in;
+        margin-bottom:0in;
+	margin-left:.5in;
+        margin-bottom:.0001pt;
+        font-size:12.0pt;
+        font-family:"Calibri",sans-serif;}
+p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle                                                                
+        {margin-top:0in;
+        margin-right:0in;
+        margin-bottom:0in;
+	margin-left:.5in;
+        margin-bottom:.0001pt;
+	font-size:12.0pt;
+        font-family:"Calibri",sans-serif;}
+
     </style>
     
 </head>
@@ -162,11 +210,65 @@ incidence.theResults = obj.IncidenceRate;
 <body onload="onLoad();">
 <div class="page">
     <header>
-        <h1>U.S. COVID MAP</h1>
-        <h3>Infection Probablilty: Probability of getting infected in the state after 100 contacts</h3>
-        <h3>Contact Budget: Number of people you can contact if you want less than 5% chance of infection</h3>
-	<h3>Assumption: Transmission probability per contact is 0.1</h3>
+        <h1>COVID-19 in the U.S</h1>
     </header>
+
+<div class=WordSection1>
+
+<p class=MsoNormal><span style='font-size:11.0pt'>This map displays cumulative
+case, cumulative death and 14-day average incidence rate data from the Covid
+Tracking Project; it also shows infection probability and contact budget based
+on a mathematical model* applied to COVID-19.</span></p>
+
+<p class=MsoNormal><span style='font-size:11.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal><b><span style='font-size:11.0pt;color:#222222'>Cases</span></b><span
+style='font-size:11.0pt;color:#222222'>: Total cases to date per million
+population</span></p>
+
+<p class=MsoNormal><b><span style='font-size:11.0pt;color:#222222'>Deaths</span></b><span
+style='font-size:11.0pt;color:#222222'>: Total deaths&nbsp;to date per million
+population</span></p>
+
+<p class=MsoNormal><b><span style='font-size:11.0pt;color:#222222'>Incidence
+Rate</span></b><span style='font-size:11.0pt;color:#222222'>: Average number of
+cases per day over the last 14 days per million population</span></p>
+
+<p class=MsoNormal><b><span style='font-size:11.0pt;color:#222222'>Infection
+Probability*</span></b><span style='font-size:11.0pt;color:#222222'>: The probability
+that one will be infected after 100 contacts </span></p>
+
+<p class=MsoNormal><b><span style='font-size:11.0pt;color:#222222'>Contact
+Budget*</span></b><span style='font-size:11.0pt;color:#222222'>: The maximum
+number of contacts to ensure that the infection probability is below 5%</span></p>
+
+<p class=MsoNormal><span style='font-size:11.0pt;color:#222222'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:11.0pt;color:#222222'>Epidemiological
+parameter values* used by the model for computing infection probability and
+contact budget: Transmission probability per contact = 10%; Infection-Fatality
+Ratio (IFR) =  0.0064;  Lag between infection and death = 24 days; Serial
+    interval = 4.2 days</span></p>
+
+<p class=MsoNormal><span style='font-size:11.0pt;color:#222222'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:11.0pt;color:#222222'>Sources of
+COVID-19 data used: The </span><span style='font-size:11.0pt'><a
+href="https://covidtracking.com/">Covid Tracking Project</a></span><span
+style='font-size:11.0pt;color:#222222'>, </span><span style='font-size:11.0pt'><a
+href="https://rt.live/">Rt Live</a></span></p>
+
+<!-- <p class=MsoNormal><span style='font-size:11.0pt;color:#222222'>&nbsp;</span></p> -->
+
+<p class=MsoNormal><span style='font-size:11.0pt;color:#222222'>*See paper </span><span
+style='font-size:11.0pt'><a
+href="https://sites.google.com/site/ramanathanatbbn/home/pdf/Infection_Probability_Model_v1.pdf?attredirects=0">here</a></span><span
+style='font-size:11.0pt;color:#222222'>. The paper is work-in-progress and has
+not been peer-reviewed. Please use information here at your own risk and follow
+public health guidelines.</span></p>
+
+</div>
+    
     <div class="map-container">
 
         <canvas id="map_canvas" width="800" height="550" style="position:relative;">
