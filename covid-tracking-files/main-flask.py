@@ -27,7 +27,9 @@ def webmapper():
     #     updateNow = True
     #     print("No file found\n")
 
-    if (datetime.datetime.now() - resultsCache["lastUpdate"] < datetime.timedelta(hours=6)) and not alwaysUpdate:
+    print("Cached time is", resultsCache["lastUpdate"])
+    print("Time now is", datetime.datetime.now())
+    if (datetime.datetime.now() - resultsCache["lastUpdate"] < datetime.timedelta(hours=1)) and not alwaysUpdate:
         print("Outputting from cache")
         outputResults(resultsCache["results"], False, [])
     else:

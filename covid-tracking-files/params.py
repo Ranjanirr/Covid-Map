@@ -45,7 +45,7 @@ pcrange = np.linspace(0.01, 0.1, 10)
 NULLL = -1
 
 resultsCache = {
-    "lastUpdate" : datetime.date(2020, 1, 1),
+    "lastUpdate" : datetime.datetime(2020, 1, 1),
     "results"  : []
 }
 
