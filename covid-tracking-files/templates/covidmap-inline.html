@@ -197,15 +197,15 @@ var setStateResults = function(state)
   var deathsData = stateInfoTable.children[1].children[1];
   var incidenceData = stateInfoTable.children[1].children[2];
  
-  infectionData.children[0].innerText = "Infection Probability";
+  infectionData.children[0].innerText = "Infection Probability per 100 contacts";
   infectionData.children[1].innerText = infection.theResults[state]
-  contactData.children[0].innerText = "Contact Budget";
+  contactData.children[0].innerText = "Contact Budget for 5% infection chance";
   contactData.children[1].innerText = contact.theResults[state]
-  casesData.children[0].innerText = "Total cases"
+  casesData.children[0].innerText = "Total cases/mil"
   casesData.children[1].innerText = cases.theResults[state]
-  deathsData.children[0].innerText = "Total deaths"
+  deathsData.children[0].innerText = "Total deaths/mil"
   deathsData.children[1].innerText = deaths.theResults[state]
-  incidenceData.children[0].innerText = "Incidence rate"
+  incidenceData.children[0].innerText = "14-day Incidence rate"
   incidenceData.children[1].innerText = incidence.theResults[state]
 
 };
@@ -319,7 +319,7 @@ guidelines.</span></p>
                     <td class="name-3"></td>
                 </tr>
                 <tr>
-                    <td class="name-4">Infection Probability/100 contacts</td>
+                    <td class="name-4">Infection Probability per 100 contacts</td>
                     <td class="name-4"></td>
                 </tr>
                 <tr>
