@@ -92,13 +92,82 @@ footer span {
   padding: 0 5px;
 }
 
+/* MS style */
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Calibri",sans-serif;}
+a:link, span.MsoHyperlink
+	{color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:#954F72;
+	text-decoration:underline;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Calibri",sans-serif;}
+.MsoChpDefault
+	{font-family:"Calibri",sans-serif;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+
     </style>
     
 </head>
 <!-- map.js -->
 <script type="text/javascript" src="https://s3.amazonaws.com/media.skillcrush.com/skillcrush/wp-content/uploads/2017/11/map.js"></script>
 <!-- custom js (uncomment when you've added your custom script.js file) -->
-<script type="text/javascript" src="tmp/results.js"></script>
+<script type="text/javascript" src="/tmp/results.js"></script>
 <script type="text/javascript">
 
 var prevState = 0;
@@ -128,15 +197,15 @@ var setStateResults = function(state)
   var deathsData = stateInfoTable.children[1].children[1];
   var incidenceData = stateInfoTable.children[1].children[2];
  
-  infectionData.children[0].innerText = "Infection Probability";
+  infectionData.children[0].innerText = "Infection Probability per 100 contacts";
   infectionData.children[1].innerText = infection.theResults[state]
-  contactData.children[0].innerText = "Contact Budget";
+  contactData.children[0].innerText = "Contact Budget for 5% infection chance";
   contactData.children[1].innerText = contact.theResults[state]
-  casesData.children[0].innerText = "Total cases"
+  casesData.children[0].innerText = "Total cases/mil"
   casesData.children[1].innerText = cases.theResults[state]
-  deathsData.children[0].innerText = "Total deaths"
+  deathsData.children[0].innerText = "Total deaths/mil"
   deathsData.children[1].innerText = deaths.theResults[state]
-  incidenceData.children[0].innerText = "Incidence rate"
+  incidenceData.children[0].innerText = "14-day Incidence rate"
   incidenceData.children[1].innerText = incidence.theResults[state]
 
 };
@@ -162,11 +231,68 @@ incidence.theResults = obj.IncidenceRate;
 <body onload="onLoad();">
 <div class="page">
     <header>
-        <h1>U.S. COVID MAP</h1>
-        <h3>Infection Probablilty: Probability of getting infected in the state after 100 contacts</h3>
-        <h3>Contact Budget: Number of people you can contact if you want less than 5% chance of infection</h3>
-	<h3>Assumption: Transmission probability per contact is 0.1</h3>
+        <h1>COVID-19 in the U.S</h1>
     </header>
+
+<div class=WordSection1>
+
+<p class=MsoNormal><span style='font-size:10.0pt'>This map displays cumulative
+case, cumulative death and 14-day average incidence rate data from the Covid
+Tracking Project. It also shows infection probability and contact budget based
+on a mathematical model* applied to COVID-19.</span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal><b><span style='font-size:10.0pt;color:#222222'>Cases</span></b><span
+style='font-size:10.0pt;color:#222222'>: Total cases to date per million
+population</span></p>
+
+<p class=MsoNormal><b><span style='font-size:10.0pt;color:#222222'>Deaths</span></b><span
+style='font-size:10.0pt;color:#222222'>: Total deaths&nbsp;to date per million
+population</span></p>
+
+<p class=MsoNormal><b><span style='font-size:10.0pt;color:#222222'>Incidence
+Rate</span></b><span style='font-size:10.0pt;color:#222222'>: Average number of
+cases per day over the last 14 days per million population</span></p>
+
+<p class=MsoNormal><b><span style='font-size:10.0pt;color:#222222'>Infection
+Probability*</span></b><span style='font-size:10.0pt;color:#222222'>: The probability
+that one will be infected after 100 contacts over the next few days </span></p>
+
+<p class=MsoNormal><b><span style='font-size:10.0pt;color:#222222'>Contact
+Budget*</span></b><span style='font-size:10.0pt;color:#222222'>: The maximum
+number of contacts over the next few days to ensure that the infection
+probability is below 5%</span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;color:#222222'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;color:#222222'>The model* for
+computing the infection probability and contact budget rely on a number of
+epidemiological parameter values published in peer-reviewed literature,
+COVID-19 data and some assumptions. Therefore, we the absolute numbers are
+likely to have some inaccuracy. However, the relative values between states
+should be more reliable (e.g. asking “Am I more likely to be infected if I go
+to Massachusetts vs Connecticut”?) </span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;color:#222222'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;color:#222222'>Sources of
+COVID-19 data used: The </span><span style='font-size:10.0pt'><a
+href="https://covidtracking.com/">Covid Tracking Project</a></span><span
+style='font-size:10.0pt;color:#222222'>, </span><span style='font-size:10.0pt'><a
+href="https://rt.live/">Rt Live</a></span></p>
+
+<!-- <p class=MsoNormal><span style='font-size:10.0pt;color:#222222'>&nbsp;</span></p> -->
+
+<p class=MsoNormal><span style='font-size:10.0pt;color:#222222'>*See paper </span><span
+style='font-size:10.0pt'><a
+href="https://sites.google.com/site/ramanathanatbbn/home/pdf/Infection_Probability_Model_v1.pdf?attredirects=0">here</a></span><span
+style='font-size:10.0pt;color:#222222'>. The paper has not been peer-reviewed.
+Please use information here at your own risk and follow public health
+guidelines.</span></p>
+
+</div>
+    
     <div class="map-container">
 
         <canvas id="map_canvas" width="800" height="550" style="position:relative;">
@@ -181,23 +307,23 @@ incidence.theResults = obj.IncidenceRate;
             </theader>
             <tbody>
                 <tr>
-                    <td class="name-1">Total cases</td>
+                    <td class="name-1">Total cases/mil</td>
                     <td class="name-1"></td>
                 </tr>
                 <tr>
-                    <td class="name-2">Total Deaths</td>
+                    <td class="name-2">Total Deaths/mil</td>
                     <td class="name-2"></td>
                 </tr>
                 <tr>
-                    <td class="name-3">Incidence Rate</td>
+                    <td class="name-3">14-day Incidence Rate</td>
                     <td class="name-3"></td>
                 </tr>
                 <tr>
-                    <td class="name-4">Infection Probability</td>
+                    <td class="name-4">Infection Probability per 100 contacts</td>
                     <td class="name-4"></td>
                 </tr>
                 <tr>
-                    <td class="name-5">Contact Budget</td>
+                    <td class="name-5">Contact Budget for 5% infection chance</td>
                     <td class="name-5"></td>
                 </tr>
            

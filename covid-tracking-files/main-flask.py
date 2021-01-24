@@ -15,22 +15,30 @@ def webmapper():
 
     #f, d = dataIO.getLatestCSVFile("Data/", "ctp-")
 
-    deltaSecsForUpdate = 24 * 3600
-    updateNow = True
+    # deltaSecsForUpdate = 24 * 3600
+    # updateNow = True
+    #
+    # try:
+    #     modTimeSinceEpoch = os.path.getmtime("/tmp/results.js")
+    #     print("time since epoch:", modTimeSinceEpoch)
+    #     if (time.time() - modTimeSinceEpoch) < deltaSecsForUpdate:
+    #         updateNow = False
+    # except OSError:
+    #     updateNow = True
+    #     print("No file found\n")
 
-    try:
-        modTimeSinceEpoch = os.path.getmtime("/tmp/results.js")
-        print("time since epoch:", modTimeSinceEpoch)
-        if (time.time() - modTimeSinceEpoch) < deltaSecsForUpdate:
-            updateNow = False
-    except OSError:
-        updateNow = True
-        print("No file found\n")
-
-    update = updateNow or alwaysUpdate
-    print("Update is", update)
-
-    if (not bypass) and update:
+    print("Cached time is", resultsCache["lastUpdate"])
+    print("Time now is", datetime.datetime.now())
+    if (datetime.datetime.now() - resultsCache["lastUpdate"] < datetime.timedelta(hours=1)) and not alwaysUpdate:
+        print("Outputting from cache")
+        outputResults(resultsCache["results"], False, [])
+    else:
+    #     print("Too early")
+    #
+    # update = updateNow or alwaysUpdate
+    # print("Update is", update)
+    #
+    # if (not bypass) and update:
         print("Updating data\n")
         externalData["ctpFrame"] = pd.read_csv(covid19StatesDataURL)
         externalData["rtLiveFrame"] = pd.read_csv(rtLiveURL)
