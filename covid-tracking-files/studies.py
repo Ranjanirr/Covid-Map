@@ -154,8 +154,6 @@ def tabulateStateResults(states, showMethods=False):
 
     results["Cases"] = []; results["Deaths"] = []; results["IncidenceRate"] = []
     results["InfChance"] = []; results["ContactBudget"] = [];
-
-
     #results["ActiveInf"] = []; results["infOnDate"] = []
 
     diffAvg = {x:0 for x in methodsToAvgOver}
@@ -201,6 +199,7 @@ def tabulateStateResults(states, showMethods=False):
 
     resultsCache["results"] = results
     resultsCache["lastUpdate"] = datetime.datetime.now()
+    print("Cached results at", resultsCache["lastUpdate"])
 
     outputResults(results, showMethods, diffAvg)
 

@@ -33,16 +33,12 @@ def webmapper():
         print("Outputting from cache")
         outputResults(resultsCache["results"], False, [])
     else:
-    #     print("Too early")
-    #
-    # update = updateNow or alwaysUpdate
-    # print("Update is", update)
-    #
-    # if (not bypass) and update:
         print("Updating data\n")
         externalData["ctpFrame"] = pd.read_csv(covid19StatesDataURL)
         externalData["rtLiveFrame"] = pd.read_csv(rtLiveURL)
         externalData["popFrame"] = pd.read_csv("Data/census-state-pop-abbrev.csv")
+
+        print("Finished updating data, time now is", datetime.datetime.now())
         
         userParams["dateOfLastUpd"] = datetime.date.today().isoformat()
         userParams["consideredDate"] = datetime.date.today() - datetime.timedelta(1)
@@ -56,6 +52,8 @@ def webmapper():
         print("\nTabulating for states\n", userParams["selectedStates"])
         tabulateStateResults(userParams["selectedStates"])
 
+        print("Finished tabulating, time now is", datetime.datetime.now())
+
         
     return render_template("covidmap-inline.html")
 
@@ -63,3 +61,4 @@ def webmapper():
 if __name__ == "__main__":
     # Used when running locally only. When deploying to Google App                                                                                            # Engine, a webserver process such as Gunicorn will serve the app. This                                                                                   # can be configured by adding an `entrypoint` to app.yaml.                                                                                                                        
     app.run(host="localhost", port=8080, debug=True)
+    print("Finished app run, time now is", datetime.datetime.now())
