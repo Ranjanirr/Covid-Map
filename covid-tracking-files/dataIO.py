@@ -30,7 +30,10 @@ def getEntryFromCTPData(state, date, colKey, avgOverDays=NULLL):
         for j in range(avgOverDays):
             d = lastDateInWindow - datetime.timedelta(days=j)
             dInt = int(d.strftime('%Y%m%d'))
+            dStr = d.strftime('%Y%m%d')
             entry = ctp.loc[(ctp.date == dInt) & (ctp.state == state)][colKey]
+            #entry = ctp.loc[(ctp.date == dStr) & (ctp.state == state)][colKey]
+            #entry = ctp.loc[(ctp.date == d) & (ctp.state == state)][colKey]
             if not entry.empty:
                 entryValue = int(float(entry.to_string(index=False)))
                 summ += entryValue
@@ -95,18 +98,15 @@ def initData(update=False, prompt=True):
         else:
             print("OK, got it... will not pull data. For now, using latest available")
 
-            ctpFile, ctpDate =  getLatestCSVFile(directory, "ctp-")
-            rtFile, rtDate = getLatestCSVFile(directory, "rt-")
-            ctpPath = directory + ctpFile
-            rtPath = directory + rtFile
-            userParams["dateOfLastUpd"] = ctpDate.isoformat()
-            userParams["consideredDate"] = ctpDate - datetime.timedelta(1)
+            ctpPath, rtPath = pullLatestAvailableData(directory)
+
     else:
+        ctpPath, rtPath = pullLatestAvailableData(directory)
         dateOfLastUpd = userParams["dateOfLastUpd"]
         print("Using data pulled on ", dateOfLastUpd, "use option -updateAsof YYYY-MM-DD to change")
 
-        ctpPath = directory + "ctp-" + str(dateOfLastUpd) + ".csv"
-        rtPath = directory + "rt-" + str(dateOfLastUpd) + ".csv"
+        # ctpPath = directory + "ctp-" + str(dateOfLastUpd) + ".csv"
+        # rtPath = directory + "rt-" + str(dateOfLastUpd) + ".csv"
 
     print("Covid Tracking Project file is: ", ctpPath, "Rtlive file is: ", rtPath)
 
@@ -114,7 +114,28 @@ def initData(update=False, prompt=True):
     externalData["rtLiveFrame"] = pd.read_csv(rtPath)
     externalData["popFrame"] = pd.read_csv("Data/census-state-pop-abbrev.csv")
 
+    # WARNING: To turn truncation on, also need to use dStr in getEntryFromCTPData
+    # externalData["ctpFrame"] = truncateDataBeforeDate(externalData["ctpFrame"], "%Y%m%d")
+    # externalData["rtLiveFrame"] = truncateDataBeforeDate(externalData["rtLiveFrame"], "%Y-%m-%d")
+
     initStatePopulations(externalData["popFrame"])
+
+def pullLatestAvailableData(directory):
+    ctpFile, ctpDate = getLatestCSVFile(directory, "ctp-")
+    rtFile, rtDate = getLatestCSVFile(directory, "rt-")
+    ctpPath = directory + ctpFile
+    rtPath = directory + rtFile
+    userParams["dateOfLastUpd"] = ctpDate.isoformat()
+    userParams["consideredDate"] = ctpDate - datetime.timedelta(1)
+
+    return ctpPath, rtPath
+
+def truncateDataBeforeDate(df, fmt):
+    ndf = df
+    ndf["date"] = pd.to_datetime(df["date"], format=fmt)
+    res = ndf[(ndf['date'] > '2020-09-01')]
+    res["date"] = res["date"].dt.strftime(fmt)
+    return res
 
 def getLatestCSVFile(direc, prefix):
 
