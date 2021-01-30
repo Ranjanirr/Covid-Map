@@ -249,6 +249,10 @@ def outputResults(results, showMethods, diffAvg):
                 #json.dump(results, jf)
                 print(jsStr, file=jf)
 
+            print("\n...Confirming what I wrote:\n")
+            with open("/tmp/results.js", "r") as cf:
+                print(cf.read())
+
 def tabulateRoleInfProbabilities(states):
     scenarioVals = {
         "Grocery Store Shopper": (500, 15),
