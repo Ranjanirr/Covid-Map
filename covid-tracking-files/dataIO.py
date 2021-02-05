@@ -105,9 +105,6 @@ def initData(update=False, prompt=True):
         dateOfLastUpd = userParams["dateOfLastUpd"]
         print("Using data pulled on ", dateOfLastUpd, "use option -updateAsof YYYY-MM-DD to change")
 
-        # ctpPath = directory + "ctp-" + str(dateOfLastUpd) + ".csv"
-        # rtPath = directory + "rt-" + str(dateOfLastUpd) + ".csv"
-
     print("Covid Tracking Project file is: ", ctpPath, "Rtlive file is: ", rtPath)
 
     externalData["ctpFrame"] = pd.read_csv(ctpPath)
@@ -190,42 +187,6 @@ def parseCLI():
 
     return args
 
-# def parseCLI():
-#     parser = ArgumentParser(description="Area- and Time-specific Infection Probability Model")
-#
-#     parser.add_argument("-noupdateData", action="store_true", help="Fetch latest data from Covid tracking and rtlive sites")
-#     parser.add_argument("-updateAsOf", type=str, help="Use data files pulled on")
-#
-#     parser.add_argument("-interactive", action="store_true", help="Interactive mode with user prompted input")
-#     parser.add_argument("-tabulate", action="store_true", help="Tabulate methods, avg infection and cont. budg")
-#
-#     parser.add_argument("-dataview", type=str,
-#                         help="View COVID19 data trends, space seperated quoted list of subset of (positiveIncrease, deathIncrease, percentPositive")
-#     parser.add_argument("-plot", type=str,
-#                         help="Plot studies as specified, space separated quoted list of subset of (CompareMethods, InfProb, QuarantineVsNot, ContactBudget, Evolution)")
-#     parser.add_argument("-js", action="store_true", help="Print out table to be readable as a Javascript object")
-#
-#     parser.add_argument("-states", help="US states of interest, space separated string of state abbrev",
-#                         default="GA CA AZ FL")
-#     #parser.add_argument("-consideredDate", help="Date of interest YYYY-MM-DD", default="2020-08-12")
-#     parser.add_argument("-consideredDate", type=str, help="Date of interest YYYY-MM-DD")
-#     parser.add_argument("-history", type=int, help="Days history to plot over", default=30)
-#     parser.add_argument("-avgOverDays", type=int, help= "Days to average over", default=3)
-#
-#     parser.add_argument("-TransmissionProbability", type=float, default=0.1)
-#     parser.add_argument("-NumContacts", default=100)
-#     parser.add_argument("-ComfortProbability", default=0.05)
-#     parser.add_argument("-TimeToQuar", type=int, default=lag)
-#
-#     parser.add_argument("-methodsShow", action="store_true", help="For tabulating, show individual method results in addition to average")
-#     parser.add_argument("-perMil", action="store_true", help="Show results on a per-million population basis (note, for -t, some are already per mil)")
-#
-#     args = parser.parse_args()
-#
-#     if args.interactive:
-#         return getPromptedInput()
-#
-#     return args
 
 def getPromptedInput():
     print("Prompted Input")

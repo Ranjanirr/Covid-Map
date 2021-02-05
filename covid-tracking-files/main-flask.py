@@ -11,26 +11,11 @@ alwaysUpdate=False
 @app.route("/", methods=["GET"])
 def webmapper():
 
-    print("In webmapper\n")
-
-    #f, d = dataIO.getLatestCSVFile("Data/", "ctp-")
-
-    # deltaSecsForUpdate = 24 * 3600
-    # updateNow = True
-    #
-    # try:
-    #     modTimeSinceEpoch = os.path.getmtime("/tmp/results.js")
-    #     print("time since epoch:", modTimeSinceEpoch)
-    #     if (time.time() - modTimeSinceEpoch) < deltaSecsForUpdate:
-    #         updateNow = False
-    # except OSError:
-    #     updateNow = True
-    #     print("No file found\n")
-
     print("Cached time is", resultsCache["lastUpdate"])
     print("Time now is", datetime.datetime.now())
-    if (datetime.datetime.now() - resultsCache["lastUpdate"] < datetime.timedelta(hours=1)) and not alwaysUpdate:
+    if (datetime.datetime.now() - resultsCache["lastUpdate"] < datetime.timedelta(hours=24)) and not alwaysUpdate:
         print("Outputting from cache")
+        userParams["outputType"] = "js"
         outputResults(resultsCache["results"], False, [])
     else:
         print("Updating data\n")

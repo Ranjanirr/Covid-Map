@@ -18,12 +18,6 @@ methColors = {
     "C": "r"
 }
 
-# regColors = {}
-# colorList = ["b", "c", "g", "r", "p"]
-#
-# for k in userParams["selectedStates"]:
-#     regColors[k] = colorList[userParams["selectedStates"].index(k)]
-
 def study_pim_vs_m_CompareMethodsForGivenRegion(region, mspace, methodList):
     for method in methodList:
         pim = model.getInfecProbability(region, userParams["TP"], mspace, method)
@@ -203,29 +197,6 @@ def tabulateStateResults(states, showMethods=False):
 
     outputResults(results, showMethods, diffAvg)
 
-    # #print(tabulate(results, headers="keys", floatfmt=".2f", tablefmt="latex"))
-    # #sortedResults = sorted(results, key=operator.itemgetter(4))
-    # print("\nNOTE: CASES, DEATHS AND INCIDENCE RATE ARE PER MILLION PEOPLE")
-    # print("NOTE: CASES and DEATHS are CUMULATIVE; INCIDENCE RATE IS AVG CASES OVER LAST 14 DAYS\n")
-    #
-    # #print(tabulate(results, headers="keys", floatfmt=".2f"))
-    #
-    # tableStr = tabulate(results, headers="keys", floatfmt=".2f")
-    # if userParams["outputType"] == "htmlreturn":
-    #     webStr = tableStr.replace("\n", "<br/>")
-    #     newWebStr = "<pre>" + webStr + "</pre>"
-    #     return newWebStr
-    # else:
-    #     print(tableStr)
-    #     if showMethods: print("\nOver/under estimate:", ["{:.2f}".format(diffAvg[m]) for m in methodsToAvgOver])
-    #     if userParams["outputType"] == "js":
-    #         resStr = json.dumps(results)
-    #         jsStr = "results = " + resStr + ";"
-    #         with open(userParams["jsfile"], "w+") as jf:
-    #             print("Dumping results.js into jsfile\n")
-    #             #json.dump(results, jf)
-    #             print(jsStr, file=jf)
-
 def outputResults(results, showMethods, diffAvg):
 
     print("\nNOTE: CASES, DEATHS AND INCIDENCE RATE ARE PER MILLION PEOPLE")
@@ -249,9 +220,9 @@ def outputResults(results, showMethods, diffAvg):
                 #json.dump(results, jf)
                 print(jsStr, file=jf)
 
-            print("\n...Confirming what I wrote:\n")
-            with open("/tmp/results.js", "r") as cf:
-                print(cf.read())
+            # print("\n...Confirming what I wrote:\n")
+            # with open("/tmp/results.js", "r") as cf:
+            #     print(cf.read())
 
 def tabulateRoleInfProbabilities(states):
     scenarioVals = {

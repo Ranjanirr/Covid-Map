@@ -20,7 +20,7 @@ userParams = {
     "TP"             : 0.1,
     "contacts"       : 100,
     "comfortProb"    : 0.05,
-    "outputType"     : "js",
+    "outputType"     : "console",
     "jsfile"         : "results.js"
 }
 
