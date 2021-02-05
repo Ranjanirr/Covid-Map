@@ -18,6 +18,91 @@ methColors = {
     "C": "r"
 }
 
+def tabulateStateResults(states, showMethods=False):
+
+    results = OrderedDict()
+    results["State"] = []
+    if showMethods:
+        for m in methodsToAvgOver: results[m+"(%)"] = []
+
+    results["Cases"] = []; results["Deaths"] = []; results["IncidenceRate"] = []
+    results["InfChance"] = []; results["ContactBudget"] = [];
+    #results["ActiveInf"] = []; results["infOnDate"] = []
+
+    diffAvg = {x:0 for x in methodsToAvgOver}
+    odds = {x:0 for x in methodsToAvgOver}
+    for s in states:
+        results["State"].append(s)
+
+        cumCases = dataIO.getEntryFromCTPData(s, userParams["consideredDate"], "positive")
+        cumCasesPerMil = float(cumCases)*1000000.0 / statePopulation[s]
+        results["Cases"].append(int(cumCasesPerMil))
+
+        cumDeaths = dataIO.getEntryFromCTPData(s, userParams["consideredDate"], "death")
+        cumDeathsPerMil = float(cumDeaths)*1000000.0 / statePopulation[s]
+        results["Deaths"].append(int(cumDeathsPerMil))
+
+        infectionsOverPast14Days = dataIO.getEntryFromCTPData(s, userParams["consideredDate"], "positiveIncrease", 14)
+        incidenceRate = (1000000.0*infectionsOverPast14Days)/statePopulation[s]
+        results["IncidenceRate"].append(int(incidenceRate*100)/100.0)
+
+        oddsAvg = 100 * model.getInfecProbability(s, userParams["TP"], userParams["contacts"], methodsToAvgOver, tqspace=userParams["timeToQuar"])
+        # results["InfProb(%)"].append(oddsAvg)
+        results["InfChance"].append(str(int(oddsAvg*100)/100.0)+"%")
+
+        outcome, maxM = model.getContactsBudget(s, userParams["TP"], userParams["comfortProb"], methodsToAvgOver,
+                                                tqspace=userParams["timeToQuar"])
+        if outcome != "NO LIMIT":
+            results["ContactBudget"].append(int(maxM))
+        else:
+            results["ContactBudget"].append(outcome)
+
+        # activeInfections = model.getPhi_i(s, userParams["TP"], userParams["contacts"], ["A"], tqspace=userParams["timeToQuar"])
+        # results["ActiveInf"].append(ceil(activeInfections))
+        #
+        # infOnDate = model.getInfectionsOnRefDateInRegion(userParams["consideredDate"], s, ["A"], tqspace=lag)
+        # results["infOnDate"].append(ceil(infOnDate))
+
+        if showMethods:
+            for method in methodsToAvgOver:
+                odds[method] = 100 * model.getInfecProbability(s, userParams["TP"], userParams["contacts"], method)
+                diffAvg[method] += (odds[method] - oddsAvg)
+
+                results[method+"(%)"].append(odds[method])
+
+    resultsCache["results"] = results
+    resultsCache["lastUpdate"] = datetime.datetime.now()
+    print("Cached results at", resultsCache["lastUpdate"])
+
+    outputResults(results, showMethods, diffAvg)
+
+def outputResults(results, showMethods, diffAvg):
+
+    print("\nNOTE: CASES, DEATHS AND INCIDENCE RATE ARE PER MILLION PEOPLE")
+    print("NOTE: CASES and DEATHS are CUMULATIVE; INCIDENCE RATE IS AVG CASES OVER LAST 14 DAYS\n")
+
+    tableStr = tabulate(results, headers="keys", floatfmt=".2f")
+
+    if userParams["outputType"] == "htmlreturn":
+        webStr = tableStr.replace("\n", "<br/>")
+        newWebStr = "<pre>" + webStr + "</pre>"
+        return newWebStr
+    else:
+        print(tableStr)
+        if showMethods: print("\nOver/under estimate:", ["{:.2f}".format(diffAvg[m]) for m in methodsToAvgOver])
+
+        if userParams["outputType"] == "js":
+            resStr = json.dumps(results)
+            jsStr = "results = " + resStr + ";"
+            with open(userParams["jsfile"], "w+") as jf:
+                print("Dumping results.js into jsfile\n")
+                #json.dump(results, jf)
+                print(jsStr, file=jf)
+
+            # print("\n...Confirming what I wrote:\n")
+            # with open("/tmp/results.js", "r") as cf:
+            #     print(cf.read())
+
 def study_pim_vs_m_CompareMethodsForGivenRegion(region, mspace, methodList):
     for method in methodList:
         pim = model.getInfecProbability(region, userParams["TP"], mspace, method)
@@ -139,90 +224,7 @@ def study_pim_vs_days_CompareRegions(regionList, drange, methods):
                     "Infection probability")
 
 #############################################################################################
-def tabulateStateResults(states, showMethods=False):
 
-    results = OrderedDict()
-    results["State"] = []
-    if showMethods:
-        for m in methodsToAvgOver: results[m+"(%)"] = []
-
-    results["Cases"] = []; results["Deaths"] = []; results["IncidenceRate"] = []
-    results["InfChance"] = []; results["ContactBudget"] = [];
-    #results["ActiveInf"] = []; results["infOnDate"] = []
-
-    diffAvg = {x:0 for x in methodsToAvgOver}
-    odds = {x:0 for x in methodsToAvgOver}
-    for s in states:
-        results["State"].append(s)
-
-        cumCases = dataIO.getEntryFromCTPData(s, userParams["consideredDate"], "positive")
-        cumCasesPerMil = float(cumCases)*1000000.0 / statePopulation[s]
-        results["Cases"].append(int(cumCasesPerMil))
-
-        cumDeaths = dataIO.getEntryFromCTPData(s, userParams["consideredDate"], "death")
-        cumDeathsPerMil = float(cumDeaths)*1000000.0 / statePopulation[s]
-        results["Deaths"].append(int(cumDeathsPerMil))
-
-        infectionsOverPast14Days = dataIO.getEntryFromCTPData(s, userParams["consideredDate"], "positiveIncrease", 14)
-        incidenceRate = (1000000.0*infectionsOverPast14Days)/statePopulation[s]
-        results["IncidenceRate"].append(int(incidenceRate*100)/100.0)
-
-        oddsAvg = 100 * model.getInfecProbability(s, userParams["TP"], userParams["contacts"], methodsToAvgOver, tqspace=userParams["timeToQuar"])
-        # results["InfProb(%)"].append(oddsAvg)
-        results["InfChance"].append(str(int(oddsAvg*100)/100.0)+"%")
-
-        outcome, maxM = model.getContactsBudget(s, userParams["TP"], userParams["comfortProb"], methodsToAvgOver,
-                                                tqspace=userParams["timeToQuar"])
-        if outcome != "NO LIMIT":
-            results["ContactBudget"].append(int(maxM))
-        else:
-            results["ContactBudget"].append(outcome)
-
-        # activeInfections = model.getPhi_i(s, userParams["TP"], userParams["contacts"], ["A"], tqspace=userParams["timeToQuar"])
-        # results["ActiveInf"].append(ceil(activeInfections))
-        #
-        # infOnDate = model.getInfectionsOnRefDateInRegion(userParams["consideredDate"], s, ["A"], tqspace=lag)
-        # results["infOnDate"].append(ceil(infOnDate))
-
-        if showMethods:
-            for method in methodsToAvgOver:
-                odds[method] = 100 * model.getInfecProbability(s, userParams["TP"], userParams["contacts"], method)
-                diffAvg[method] += (odds[method] - oddsAvg)
-
-                results[method+"(%)"].append(odds[method])
-
-    resultsCache["results"] = results
-    resultsCache["lastUpdate"] = datetime.datetime.now()
-    print("Cached results at", resultsCache["lastUpdate"])
-
-    outputResults(results, showMethods, diffAvg)
-
-def outputResults(results, showMethods, diffAvg):
-
-    print("\nNOTE: CASES, DEATHS AND INCIDENCE RATE ARE PER MILLION PEOPLE")
-    print("NOTE: CASES and DEATHS are CUMULATIVE; INCIDENCE RATE IS AVG CASES OVER LAST 14 DAYS\n")
-
-    tableStr = tabulate(results, headers="keys", floatfmt=".2f")
-
-    if userParams["outputType"] == "htmlreturn":
-        webStr = tableStr.replace("\n", "<br/>")
-        newWebStr = "<pre>" + webStr + "</pre>"
-        return newWebStr
-    else:
-        print(tableStr)
-        if showMethods: print("\nOver/under estimate:", ["{:.2f}".format(diffAvg[m]) for m in methodsToAvgOver])
-
-        if userParams["outputType"] == "js":
-            resStr = json.dumps(results)
-            jsStr = "results = " + resStr + ";"
-            with open(userParams["jsfile"], "w+") as jf:
-                print("Dumping results.js into jsfile\n")
-                #json.dump(results, jf)
-                print(jsStr, file=jf)
-
-            # print("\n...Confirming what I wrote:\n")
-            # with open("/tmp/results.js", "r") as cf:
-            #     print(cf.read())
 
 def tabulateRoleInfProbabilities(states):
     scenarioVals = {
