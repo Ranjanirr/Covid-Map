@@ -32,7 +32,7 @@ externalData = {
 
 statePopulation = {}
 
-methodsToAvgOver = ["A", "B", "C"]
+methodsToAvgOver = ["B", "C"]
 focusState = "MA"
 
 statesToExclude = ["PR"]
